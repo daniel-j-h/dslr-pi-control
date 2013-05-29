@@ -3,7 +3,14 @@
 from flask import Flask
 
 
-app = Flask(__name__, instance_relative_config=True)
+class CustomFlask(Flask):
+    jinja_options = dict(Flask.jinja_options,
+            trim_blocks=True,
+            lstrip_blocks=True,
+            auto_reload=False)
+
+
+app = CustomFlask(__name__, instance_relative_config=True)
 
 app.config.from_pyfile('development.cfg')
 #app.config.from_pyfile('production.cfg')
