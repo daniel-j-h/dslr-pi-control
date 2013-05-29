@@ -44,8 +44,8 @@ See the usbreset code in the utils directory.
 Start the server
 ----------------
 
-If you want to be fancy, you can install a web server (e.g. lighttpd, nginx) and let the Flask app communicate (e.g. FastCGI, uWSGI) with it using WSGI.
+If you want to be fancy, you can install a web server (e.g. lighttpd, nginx) and let the Flask app communicate (e.g. FastCGI, uWSGI) with it using WSGI. Please make sure to set DEBUG=False in the configuration as soon as you're not just playing around with it but using it e.g. on a public network.
 
 Otherwise, just use the Flask server:
 
-    ./app
+    ./runserver
