@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from flask import Flask
+
 
 app = Flask(__name__)
 
-app.config.from_pyfile('application.cfg', silent=True)
-
-
-@app.route('/')
-def index():
-    return 'dslr-pi-control %s' % app.config['SECRET_KEY']
-
+import dslrpicontrol.views
+import dslrpicontrol.errorhandlers
 
 
 # vim: set tabstop=4 shiftwidth=4 expandtab:
