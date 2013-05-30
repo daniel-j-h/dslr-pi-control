@@ -3,9 +3,10 @@
 import re
 from subprocess import check_call, check_output, CalledProcessError
 from collections import OrderedDict
+
 from flask import flash
 
-from dslrpicontrol import app
+from dslrpicontrol import app, cache
 
 
 def prepared_call(arguments):
@@ -24,6 +25,7 @@ def tup_lst_to_dict(tup_lst):
     return to_dict(map(strip_tup, tup_lst))
 
 
+@cache.cached(timeout=60 * 15, key_prefix='auto_detect')
 def auto_detect():
     try:
         # XXX: does not throw if no camera is available; this behavior is different from all other gphoto2 calls
@@ -48,6 +50,7 @@ def auto_detect():
     return tup_lst_to_dict(ret)
 
 
+@cache.cached(timeout=60 * 15, key_prefix='abilities')
 def abilities():
     try:
         ret = prepared_call(['--abilities'])
@@ -64,6 +67,7 @@ def abilities():
     return tup_lst_to_dict(ret)
 
 
+@cache.cached(timeout=60 * 15, key_prefix='storage_info')
 def storage_info():
     try:
         ret = prepared_call(['--storage-info'])
@@ -95,6 +99,8 @@ def list_config():
 
 
 def reset_usb():
+    cache.clear()
+
     try:
         ret = check_output(['lsusb']).splitlines()
         ret = filter(lambda x: app.config.get('CAMERA', 'Nikon') in x, ret)
