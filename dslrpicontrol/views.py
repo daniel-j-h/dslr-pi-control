@@ -4,6 +4,7 @@ from flask import flash, redirect, url_for
 
 from dslrpicontrol import app
 from dslrpicontrol.decorators import templated
+from dslrpicontrol.models import auto_detect
 
 
 @app.route('/')
@@ -15,8 +16,7 @@ def index():
 @app.route('/camera')
 @templated('camera.html')
 def camera():
-    flash(u'camera alert', 'danger')
-    return None
+    return dict(auto_detect=auto_detect(), abilities=abilities())
 
 
 @app.route('/capture')

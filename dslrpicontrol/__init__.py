@@ -14,6 +14,7 @@ app.config.from_pyfile('development.cfg')
 
 
 import dslrpicontrol.views
+import dslrpicontrol.models
 import dslrpicontrol.errorhandlers
 
 if app.debug is not True:

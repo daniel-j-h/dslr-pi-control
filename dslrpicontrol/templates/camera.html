@@ -4,7 +4,27 @@
 {% block body %}
 <div class="row">
 	<div class="col col-lg-12">
-		<p>camera body</p>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Model</th>
+					<th>Port</th>
+				</tr>
+
+			</thead>
+			<tbody>
+				{% for camera in auto_detect %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ camera.model }}</td>
+					<td>{{ camera.port }}</td>
+
+				</tr>
+				{% endfor %}
+			</tbody>
+
+		</table>
 	</div>
 </div>
 {% endblock body %}
