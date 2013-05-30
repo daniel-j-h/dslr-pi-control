@@ -23,20 +23,38 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</a>
-				<a class="navbar-brand" href="#">DSLR-Pi-Control</a>
+				<a class="navbar-brand" href="{{ url_for('index') }}">&pi;-control</a>
 				<div class="nav-collapse collapse">
 					<ul class="nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#about">About</a></li>
-						<li><a href="#contact">Contact</a></li>
+						<li><a href="{{ url_for('camera') }}"><i class="glyphicon glyphicon-camera"></i> Camera</a></li>
+						<li><a href="{{ url_for('capture') }}"><i class="glyphicon glyphicon-picture"></i> Capture</a></li>
+						<li><a href="{{ url_for('timelapse') }}"><i class="glyphicon glyphicon-time"></i> Timelapse</a></li>
+					</ul>
+					<ul class="nav navbar-nav pull-right">
+						<li><a href="https://github.com/daniel-j-h/dslr-pi-control"><i class="glyphicon glyphicon-home"></i> Github</a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
 
 		<div class="container">
+			{% block alert %}
+			{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+			{% for category, message in messages %}
+			<div class="alert alert-{{ category }}">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<strong>{{ category|capitalize }}:</strong> {{ message }}
+			</div>
+			{% endfor %}
+			{% endif %}
+			{% endwith %}
+			{% endblock alert %}
+
 			{% block body %}
-			<h1>{{ msg }}</h1>
+			<div class="page-header">
+				<h1>{{ heading }} <small>{{ subtext }}</small></h1>
+			</div>
 			{% endblock body %}
 		</div>
 
