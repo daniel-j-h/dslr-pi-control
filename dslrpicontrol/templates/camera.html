@@ -52,4 +52,54 @@
 		</table>
 	</div>
 </div>
+<div class="row">
+	<div class="col col-lg-6">
+		<table class="table table-striped">
+			<caption>Storage information</caption>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Property</th>
+					<th>Value</th>
+				</tr>
+
+			</thead>
+			<tbody>
+				{% for info in storage_info %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ info.property }}</td>
+					<td>{{ info.value }}</td>
+
+				</tr>
+				{% endfor %}
+			</tbody>
+
+		</table>
+	</div>
+	<div class="col col-lg-6">
+		<table class="table table-striped">
+			<caption>Summary</caption>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Property</th>
+					<th>Value</th>
+				</tr>
+
+			</thead>
+			<tbody>
+				{% for assoc in summary %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ assoc.property }}</td>
+					<td>{{ assoc.value }}</td>
+
+				</tr>
+				{% endfor %}
+			</tbody>
+
+		</table>
+	</div>
+</div>
 {% endblock body %}
