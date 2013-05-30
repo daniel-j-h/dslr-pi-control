@@ -2,8 +2,9 @@ dslr-pi-control
 ---------------
 
 Having fun with the Nikon D3100 dslr, using the browser. Mobile friendly and totally awesome!
-
 Tested on Chrome, Nexus 4 smartphone, Nexus 7 tablet.
+
+Note: This project serves primarily as a playground for me to refresh my knowledge about idiomatic Flask / Jinja2 setups.
 
 
 What it looks like
@@ -19,16 +20,14 @@ Flask setup
     source env/bin/activate
     pip install -r requirements.txt
 
+Note: requirements-devel.txt contains some additional code quality checkers.
 
-Python bindings for libgphoto2
-------------------------------
 
-Get the bindings from https://github.com/alexdu/piggyphoto
+gphoto2
+-------
 
-Just throw the piggyphoto subdirectory into your env's site-packages directory.
-
-    git clone --depth 0 git://github.com/alexdu/piggyphoto.git
-    mv piggyphoto/piggyphoto env/lib/python2.7/site-packages/
+Unfortunately the libgphoto2 Python bindings are ugly, full of memory leaks and missing important functions.
+The gphoto2 utility (subprocess) has to suffice. Get over it.
 
 
 Buggy USB workaround
@@ -49,3 +48,13 @@ If you want to be fancy, you can install a web server (e.g. lighttpd, nginx) and
 Otherwise, just use the Flask server:
 
     ./runserver
+
+
+
+Development
+-----------
+
+Try to keep the package clean.
+
+    pep8 --show-source --max-line-length=120 dslrpicontrol
+    pyflakes dslrpicontrol

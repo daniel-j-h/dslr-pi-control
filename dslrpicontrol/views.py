@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import render_template, flash, redirect, url_for
+from flask import flash, redirect, url_for
 
 from dslrpicontrol import app
 from dslrpicontrol.decorators import templated
