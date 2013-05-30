@@ -4,46 +4,29 @@ from flask import flash, redirect, url_for
 
 from dslrpicontrol import app
 from dslrpicontrol.decorators import templated
-from dslrpicontrol.models import auto_detect, abilities, storage_info, summary, reset_usb
+from dslrpicontrol.models import auto_detect, abilities, storage_info, reset_usb
 
 
 @app.route('/')
-@templated('baselayout.html')
-def index():
-    return redirect(url_for('camera'))
+def index(): return redirect(url_for('camera'))
 
-
-
-
-@app.route('/camera')
-@templated('camera.html')
-def camera():
-    return None
-
+@app.route('/camera/')
+def camera(): return redirect(url_for('camera_autodetect'))
 
 @app.route('/camera/autodetect')
 @templated('camera.html')
 def camera_autodetect():
-    return dict(caption='Auto detection', headers=['Model', 'Port'], properties=auto_detect())
-
+    return dict(caption='Auto detection', header=dict(key='Model', value='Port'), properties=auto_detect())
 
 @app.route('/camera/abilities')
 @templated('camera.html')
 def camera_abilities():
-    return dict(caption='Abilities', headers=['Features', 'Support'], properties=abilities())
-
+    return dict(caption='Abilities', header=dict(key='Features', value='Support'), properties=abilities())
 
 @app.route('/camera/storage')
 @templated('camera.html')
 def camera_storage():
-    return dict(caption='Storage information', headers=['Property', 'Value'], properties=storage_info())
-
-
-@app.route('/camera/summary')
-@templated('camera.html')
-def camera_summary():
-    return dict(caption='Summary', headers=['Property', 'Value'], properties=summary())
-
+    return dict(caption='Storage information', header=dict(key='Property', value='Value'), properties=storage_info())
 
 @app.route('/camera/reset')
 def camera_reset():
@@ -52,24 +35,18 @@ def camera_reset():
 
 
 
-
-@app.route('/capture')
-@templated('capture.html')
-def capture():
-    return None
-
+@app.route('/capture/')
+def capture(): return redirect(url_for('capture_image'))
 
 @app.route('/capture/image')
 @templated('capture.html')
 def capture_image():
     return None
 
-
 @app.route('/capture/video')
 @templated('capture.html')
 def capture_video():
     return None
-
 
 @app.route('/capture/audio')
 @templated('capture.html')
@@ -78,18 +55,13 @@ def capture_audio():
 
 
 
-
-@app.route('/timelapse')
-@templated('timelapse.html')
-def timelapse():
-    return None
-
+@app.route('/timelapse/')
+def timelapse(): return redirect(url_for('timelapse_timer'))
 
 @app.route('/timelapse/timer')
 @templated('timelapse.html')
 def timelapse_timer():
     return None
-
 
 @app.route('/timelapse/countdown')
 @templated('timelapse.html')

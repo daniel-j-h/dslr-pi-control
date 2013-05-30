@@ -3,31 +3,29 @@
 
 {% block body %}
 <div class="row">
-	<div class="col col-lg-6 col-offset-3">
-		<table class="table table-striped">
-			<caption>{{ caption }}</caption>
-			<thead>
-				<tr>
-					<th>#</th>
-					{% for header in headers %}
-					<th>{{ header }}</th>
-					{% endfor %}
-				</tr>
+    <div class="col col-lg-6 col-offset-3">
+        <table class="table table-striped">
+            <caption>{{ caption }}</caption>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{{ header.get('key', 'Key') }}</th>
+                    <th>{{ header.get('value', 'Value') }}</th>
+                </tr>
 
-			</thead>
-			<tbody>
-				{% for property in properties %}
-				<tr>
-					<td>{{ loop.index }}</td>
-					{% for key, value in property.iteritems() %}
-					<td>{{ value }}</td>
-					{% endfor %}
+            </thead>
+            <tbody>
+                {% for key, value in properties.iteritems() %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ key }}</td>
+                    <td>{{ value }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
 
-				</tr>
-				{% endfor %}
-			</tbody>
-
-		</table>
-	</div>
+        </table>
+    </div>
 </div>
 {% endblock body %}
+{# vim: set tabstop=4 shiftwidth=4 expandtab: #}

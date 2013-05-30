@@ -2,6 +2,7 @@
 
 import re
 from subprocess import check_call, check_output, CalledProcessError
+from collections import OrderedDict
 from flask import flash
 
 from dslrpicontrol import app
@@ -14,6 +15,15 @@ def prepared_call(arguments):
     return check_output(command).splitlines()
 
 
+def tup_lst_to_dict(tup_lst):
+    # OrderedDict (think: tree-based map) preserves ordering;
+    # using it here is enough for all our code to magically do The Right Thing
+    to_dict = lambda lst: OrderedDict(lst)
+    strip_tup = lambda (a, b): (a.strip(), b.strip())
+
+    return to_dict(map(strip_tup, tup_lst))
+
+
 def auto_detect():
     try:
         # XXX: does not throw if no camera available; this behavior is different from all other gphoto2 calls
@@ -21,10 +31,10 @@ def auto_detect():
     except (CalledProcessError, EnvironmentError) as e:
         app.logger.exception(e)
         flash(u'Auto-detection request failed', 'danger')
-        return []
+        return dict()
 
     # nothing detected, only header and separation line
-    if (len(ret) == 2): return []
+    if (len(ret) == 2): return dict()
 
     # header
     ret.pop(0)
@@ -32,9 +42,9 @@ def auto_detect():
     ret.pop(0)
 
     # map: transform to [(model, port), ...] from smth. like: ["model   port  ", ...]
-    ret = [re.search(r'^(?P<model>.+?)(\s+)(?P<port>.+$)', x.strip()).group('model', 'port') for x in ret]
-    # map: transform to [{model=x[0], port=x[1]}, ...]
-    return [dict(model=x[0], port=x[1]) for x in ret]
+    ret = [re.search(r'^(?P<model>.+)(\s+)(?P<port>.+$)', x.strip()).group('model', 'port') for x in ret]
+
+    return tup_lst_to_dict(ret)
 
 
 def abilities():
@@ -43,14 +53,14 @@ def abilities():
     except (CalledProcessError, EnvironmentError) as e:
         app.logger.exception(e)
         flash(u'Ability request failed', 'danger')
-        return []
+        return dict()
 
     # filter: empty lines
     ret = filter(lambda x: not len(x) == 0, ret)
     # map: transform to [(feature, support), ...] from smth. like: ["feature  : support  ", ...]
-    ret = [re.search(r'^(?P<feature>.*?)(\s*:\s*)(?P<support>.*$)', x.strip()).group('feature', 'support') for x in ret]
-    # map: transform to [{feature=x[0], suppport=x[1]}, ...]
-    return [dict(feature=x[0], support=x[1]) for x in ret]
+    ret = [re.search(r'^(?P<feature>.*)(\s*:\s*)(?P<support>.*$)', x.strip()).group('feature', 'support') for x in ret]
+
+    return tup_lst_to_dict(ret)
 
 
 def storage_info():
@@ -59,35 +69,29 @@ def storage_info():
     except (CalledProcessError, EnvironmentError) as e:
         app.logger.exception(e)
         flash(u'Storage information request failed', 'danger')
-        return []
+        return dict()
 
     # filter: group name
     ret = filter(lambda x: not x.startswith('[') and not x.endswith(']') and not len(x) == 0, ret)
     # map: transform to (property, value) from smth. like: ["property=value", ...]
-    ret = [re.search(r'^(?P<property>.+?)(=)(?P<value>.+$)', x.strip()).group('property', 'value') for x in ret]
-    # map: transform to [{property=x[0], value=x[1]}, ...]
-    return [dict(property=x[0], value=x[1]) for x in ret]
+    ret = [re.search(r'^(?P<property>.+)(=)(?P<value>.+$)', x.strip()).group('property', 'value') for x in ret]
 
-
-def summary():
-    try:
-        ret = prepared_call(['--summary'])
-    except (CalledProcessError, EnvironmentError) as e:
-        app.logger.exception(e)
-        flash(u'Summary request failed', 'danger')
-        return []
-
-    # filter: empty lines
-    ret = filter(lambda x: not len(x) == 0, ret)
-    # map: transform to [(property, value), ...] from smth. like: ["property:value  ", ...]
-    print(ret)
-    ret = [re.search(r'^(?P<property>.*?)(\s*:\s*)(?P<value>.*$)', x.strip()).group('property', 'value') for x in ret]
-    # map: transform to [{feature=x[0], suppport=x[1]}, ...]
-    return [dict(property=x[0], value=x[1]) for x in ret]
+    return tup_lst_to_dict(ret)
 
 
 def list_config():
-    return prepared_call(['--list-config'])
+    try:
+        ret = prepared_call(['--list-config'])
+    except (CalledProcessError, EnvironmentError) as e:
+        app.logger.exception(e)
+        flash(u'Configuration request failed', 'danger')
+        return dict()
+
+    # XXX
+    ret = [(x, 'undefined') for x in ret]
+
+    return tup_lst_to_dict(ret)
+
 
 
 def reset_usb():
