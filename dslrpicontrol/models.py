@@ -26,7 +26,7 @@ def tup_lst_to_dict(tup_lst):
 
 def auto_detect():
     try:
-        # XXX: does not throw if no camera available; this behavior is different from all other gphoto2 calls
+        # XXX: does not throw if no camera is available; this behavior is different from all other gphoto2 calls
         ret = prepared_call(['--auto-detect'])
     except (CalledProcessError, EnvironmentError) as e:
         app.logger.exception(e)
@@ -34,11 +34,12 @@ def auto_detect():
         return dict()
 
     # nothing detected, only header and separation line
-    if (len(ret) == 2): return dict()
+    if (len(ret) == 2):
+        flash(u'Auto-detection was not able to detect your camera', 'info')
+        return dict()
 
-    # header
+    # remove header and separating line
     ret.pop(0)
-    # separating line
     ret.pop(0)
 
     # map: transform to [(model, port), ...] from smth. like: ["model   port  ", ...]
@@ -91,7 +92,6 @@ def list_config():
     ret = [(x, 'undefined') for x in ret]
 
     return tup_lst_to_dict(ret)
-
 
 
 def reset_usb():

@@ -5,6 +5,7 @@ from flask import render_template
 from dslrpicontrol import app
 
 
+# the error code has to be passed to the client explicitely
 def render_error(errorcode, errormessage):
     return render_template('errorhandler.html', errorcode=errorcode, errormessage=errormessage), errorcode
 
