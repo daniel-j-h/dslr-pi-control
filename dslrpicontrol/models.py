@@ -16,13 +16,14 @@ def prepared_call(arguments):
 
 def auto_detect():
     try:
+        # XXX: does not throw if no camera available; this behavior is different from all other gphoto2 calls
         ret = prepared_call(['--auto-detect'])
     except (CalledProcessError, EnvironmentError) as e:
         app.logger.exception(e)
         flash(u'Auto-detection request failed', 'danger')
         return []
 
-    # nothing detected
+    # nothing detected, only header and separation line
     if (len(ret) == 2): return []
 
     # header

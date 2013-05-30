@@ -3,97 +3,25 @@
 
 {% block body %}
 <div class="row">
-	<div class="col col-lg-6">
+	<div class="col col-lg-6 col-offset-3">
 		<table class="table table-striped">
-			<caption>Auto detection</caption>
+			<caption>{{ caption }}</caption>
 			<thead>
 				<tr>
 					<th>#</th>
-					<th>Model</th>
-					<th>Port</th>
+					{% for header in headers %}
+					<th>{{ header }}</th>
+					{% endfor %}
 				</tr>
 
 			</thead>
 			<tbody>
-				{% for camera in auto_detect %}
+				{% for property in properties %}
 				<tr>
 					<td>{{ loop.index }}</td>
-					<td>{{ camera.model }}</td>
-					<td>{{ camera.port }}</td>
-
-				</tr>
-				{% endfor %}
-			</tbody>
-
-		</table>
-	</div>
-	<div class="col col-lg-6">
-		<table class="table table-striped">
-			<caption>Abilities</caption>
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>Features</th>
-					<th>Support</th>
-				</tr>
-
-			</thead>
-			<tbody>
-				{% for ability in abilities %}
-				<tr>
-					<td>{{ loop.index }}</td>
-					<td>{{ ability.feature }}</td>
-					<td>{{ ability.support }}</td>
-
-				</tr>
-				{% endfor %}
-			</tbody>
-
-		</table>
-	</div>
-</div>
-<div class="row">
-	<div class="col col-lg-6">
-		<table class="table table-striped">
-			<caption>Storage information</caption>
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>Property</th>
-					<th>Value</th>
-				</tr>
-
-			</thead>
-			<tbody>
-				{% for info in storage_info %}
-				<tr>
-					<td>{{ loop.index }}</td>
-					<td>{{ info.property }}</td>
-					<td>{{ info.value }}</td>
-
-				</tr>
-				{% endfor %}
-			</tbody>
-
-		</table>
-	</div>
-	<div class="col col-lg-6">
-		<table class="table table-striped">
-			<caption>Summary</caption>
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>Property</th>
-					<th>Value</th>
-				</tr>
-
-			</thead>
-			<tbody>
-				{% for assoc in summary %}
-				<tr>
-					<td>{{ loop.index }}</td>
-					<td>{{ assoc.property }}</td>
-					<td>{{ assoc.value }}</td>
+					{% for key, value in property.iteritems() %}
+					<td>{{ value }}</td>
+					{% endfor %}
 
 				</tr>
 				{% endfor %}

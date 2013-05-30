@@ -13,35 +13,88 @@ def index():
     return redirect(url_for('camera'))
 
 
+
+
 @app.route('/camera')
 @templated('camera.html')
 def camera():
-    return dict(auto_detect=auto_detect(), abilities=abilities(), storage_info=storage_info(), summary=summary())
+    return None
+
 
 @app.route('/camera/autodetect')
-@templated('cameraproperties.html')
-def camera_auto_detect():
-    return dict(caption='Auto detection', headers=['Key', 'Value'], properties=[dict(a='b', c='d'), dict(e='f', g='h')])
+@templated('camera.html')
+def camera_autodetect():
+    return dict(caption='Auto detection', headers=['Model', 'Port'], properties=auto_detect())
+
+
+@app.route('/camera/abilities')
+@templated('camera.html')
+def camera_abilities():
+    return dict(caption='Abilities', headers=['Features', 'Support'], properties=abilities())
+
+
+@app.route('/camera/storage')
+@templated('camera.html')
+def camera_storage():
+    return dict(caption='Storage information', headers=['Property', 'Value'], properties=storage_info())
+
+
+@app.route('/camera/summary')
+@templated('camera.html')
+def camera_summary():
+    return dict(caption='Summary', headers=['Property', 'Value'], properties=summary())
+
+
+@app.route('/camera/reset')
+def camera_reset():
+    reset_usb()
+    return redirect(url_for('camera'))
+
+
 
 
 @app.route('/capture')
 @templated('capture.html')
 def capture():
-    flash(u'capture alert', 'success')
     return None
+
+
+@app.route('/capture/image')
+@templated('capture.html')
+def capture_image():
+    return None
+
+
+@app.route('/capture/video')
+@templated('capture.html')
+def capture_video():
+    return None
+
+
+@app.route('/capture/audio')
+@templated('capture.html')
+def capture_audio():
+    return None
+
+
 
 
 @app.route('/timelapse')
 @templated('timelapse.html')
 def timelapse():
-    flash(u'timelapse alert', 'info')
     return None
 
 
-@app.route('/reset')
-def reset():
-    reset_usb()
-    return redirect(url_for('timelapse'))
+@app.route('/timelapse/timer')
+@templated('timelapse.html')
+def timelapse_timer():
+    return None
+
+
+@app.route('/timelapse/countdown')
+@templated('timelapse.html')
+def timelapse_countdown():
+    return None
 
 
 # vim: set tabstop=4 shiftwidth=4 expandtab:

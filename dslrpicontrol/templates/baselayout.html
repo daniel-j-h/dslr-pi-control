@@ -1,7 +1,7 @@
 {% set navigation_bar = [
-	('camera', 'camera', 'camera'),
-	('capture', 'capture', 'picture'),
-	('timelapse', 'timelapse', 'time')
+	('camera', ('autodetect', 'abilities', 'storage', 'summary'), 'camera'),
+	('capture', ('image', 'video', 'audio'), 'picture'),
+	('timelapse', ('timer', 'countdown'), 'time')
 ] %}
 {% set active_page = active_page|default('index') %}
 <!DOCTYPE html>
@@ -30,30 +30,41 @@
 				<a class="navbar-brand" href="{{ url_for('index') }}">&pi;-control</a>
 				<div class="nav-collapse collapse">
 					<ul class="nav navbar-nav">
-						{% for route, id, icon in navigation_bar %}
-						<li{% if id == active_page %} class="active"{% endif %}><a href="{{ url_for(route) }}"><i class="glyphicon glyphicon-{{ icon }}"></i> {{ id|capitalize }}</a></li>
+						{% for route, subroutes, icon in navigation_bar %}
+						<li class="{% if route == active_page %}active{% endif %}dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ route|capitalize }} <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							{% for subroute in subroutes %}
+							<li><a href="{{ url_for(route ~ '_' ~ subroute) }}"> {{ subroute|capitalize }}</a></li>
+							{% endfor %}
+						</ul>
+						</li>
 						{% endfor %}
 					</ul>
 					<ul class="nav navbar-nav pull-right">
-						<li><a href="{{ url_for('reset') }}"><i class="glyphicon glyphicon-refresh"></i> Reset</a></li>
+						<li><a href="{{ url_for('camera_reset') }}"><i class="glyphicon glyphicon-refresh"></i> Reset</a></li>
 						<li><a href="https://github.com/daniel-j-h/dslr-pi-control"><i class="glyphicon glyphicon-home"></i> Github</a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
 		<div class="container">
-			{% block alert %}
-			{% with messages = get_flashed_messages(with_categories=true) %}
-			{% if messages %}
-			{% for category, message in messages %}
-			<div class="alert alert-{{ category }}">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				<strong>{{ category|capitalize }}:</strong> {{ message }}
+			<div class="row">
+				<div class="col col-lg-8 col-offset-2">
+					{% block alert %}
+					{% with messages = get_flashed_messages(with_categories=true) %}
+					{% if messages %}
+					{% for category, message in messages %}
+					<div class="alert alert-{{ category }}">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+						<strong>{{ category|capitalize }}:</strong> {{ message }}
+					</div>
+					{% endfor %}
+					{% endif %}
+					{% endwith %}
+					{% endblock alert %}
+				</div>
 			</div>
-			{% endfor %}
-			{% endif %}
-			{% endwith %}
-			{% endblock alert %}
 
 			{% block body %}
 			{% endblock body %}
