@@ -1,3 +1,9 @@
+{% set navigation_bar = [
+	('camera', 'camera', 'camera'),
+	('capture', 'capture', 'picture'),
+	('timelapse', 'timelapse', 'time')
+] %}
+{% set active_page = active_page|default('index') %}
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -14,8 +20,6 @@
 		{% endblock head %}
 	</head>
 	<body>
-
-
 		<div class="navbar navbar-static-top">
 			<div class="container">
 				<a class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
@@ -26,9 +30,9 @@
 				<a class="navbar-brand" href="{{ url_for('index') }}">&pi;-control</a>
 				<div class="nav-collapse collapse">
 					<ul class="nav navbar-nav">
-						<li><a href="{{ url_for('camera') }}"><i class="glyphicon glyphicon-camera"></i> Camera</a></li>
-						<li><a href="{{ url_for('capture') }}"><i class="glyphicon glyphicon-picture"></i> Capture</a></li>
-						<li><a href="{{ url_for('timelapse') }}"><i class="glyphicon glyphicon-time"></i> Timelapse</a></li>
+						{% for route, id, icon in navigation_bar %}
+						<li{% if id == active_page %} class="active"{% endif %}><a href="{{ url_for(route) }}"><i class="glyphicon glyphicon-{{ icon }}"></i> {{ id|capitalize }}</a></li>
+						{% endfor %}
 					</ul>
 					<ul class="nav navbar-nav pull-right">
 						<li><a href="https://github.com/daniel-j-h/dslr-pi-control"><i class="glyphicon glyphicon-home"></i> Github</a></li>
@@ -36,7 +40,6 @@
 				</div>
 			</div>
 		</div>
-
 		<div class="container">
 			{% block alert %}
 			{% with messages = get_flashed_messages(with_categories=true) %}
@@ -52,12 +55,8 @@
 			{% endblock alert %}
 
 			{% block body %}
-			<div class="page-header">
-				<h1>{{ heading }} <small>{{ subtext }}</small></h1>
-			</div>
 			{% endblock body %}
 		</div>
-
 		{% block scripts %}
 		<script src="{{ url_for('static', filename='js/jquery-2.0.1.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
