@@ -4,7 +4,7 @@ from flask import redirect, url_for
 
 from dslrpicontrol import app
 from dslrpicontrol.decorators import templated
-from dslrpicontrol.models import auto_detect, abilities, storage_info, reset_usb
+from dslrpicontrol.models import auto_detect, abilities, storage_info, reset_usb, list_config#, timelapse, snapshot
 
 
 @app.route('/')
@@ -36,6 +36,12 @@ def camera_storage():
     return dict(caption='Storage information', header=dict(key='Property', value='Value'), properties=storage_info())
 
 
+@app.route('/camera/settings')
+@templated('camera.html')
+def camera_settings():
+    return dict(caption='Settings', header=dict(key='Property', value='Value'), properties=list_config())
+
+
 @app.route('/camera/reset')
 def camera_reset():
     reset_usb()
@@ -51,37 +57,13 @@ def capture():
 @app.route('/capture/image')
 @templated('capture.html')
 def capture_image():
-    return None
+    return dict(caption='Capture image')
 
 
-@app.route('/capture/video')
+@app.route('/capture/timelapse')
 @templated('capture.html')
-def capture_video():
-    return None
-
-
-@app.route('/capture/audio')
-@templated('capture.html')
-def capture_audio():
-    return None
-
-
-#timelapse handlers
-@app.route('/timelapse/')
-def timelapse():
-    return redirect(url_for('timelapse_timer'))
-
-
-@app.route('/timelapse/timer')
-@templated('timelapse.html')
-def timelapse_timer():
-    return None
-
-
-@app.route('/timelapse/countdown')
-@templated('timelapse.html')
-def timelapse_countdown():
-    return None
+def capture_timelapse():
+    return dict(caption='Timelapse')
 
 
 # vim: set tabstop=4 shiftwidth=4 expandtab:

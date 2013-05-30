@@ -14,11 +14,10 @@ app.config.from_pyfile('development.cfg')
 #app.config.from_pyfile('production.cfg')
 
 
-cache = Cache(app, config=app.config.get('CACHE_CONFIG', {'CACHE_TYPE' : 'simple'}))
+cache = Cache(app, config=app.config.get('CACHE_CONFIG', {'CACHE_TYPE': 'simple'}))
 
 with app.app_context():
     cache.clear()
-
 
 
 import dslrpicontrol.views

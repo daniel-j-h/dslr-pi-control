@@ -44,7 +44,7 @@ def auto_detect():
     ret.pop(0)
     ret.pop(0)
 
-    # map: transform to [(model, port), ...] from smth. like: ["model   port  ", ...]
+    # map: transform to [(model, port), ...] from smth. like: ['model   port  ', ...]
     ret = [re.search(r'^(?P<model>.+)(\s+)(?P<port>.+$)', x.strip()).group('model', 'port') for x in ret]
 
     return tup_lst_to_dict(ret)
@@ -61,7 +61,7 @@ def abilities():
 
     # filter: empty lines
     ret = filter(lambda x: not len(x) == 0, ret)
-    # map: transform to [(feature, support), ...] from smth. like: ["feature  : support  ", ...]
+    # map: transform to [(feature, support), ...] from smth. like: ['feature  : support  ', ...]
     ret = [re.search(r'^(?P<feature>.*)(\s*:\s*)(?P<support>.*$)', x.strip()).group('feature', 'support') for x in ret]
 
     return tup_lst_to_dict(ret)
@@ -78,22 +78,8 @@ def storage_info():
 
     # filter: group name
     ret = filter(lambda x: not x.startswith('[') and not x.endswith(']') and not len(x) == 0, ret)
-    # map: transform to (property, value) from smth. like: ["property=value", ...]
+    # map: transform to (property, value) from smth. like: ['property=value', ...]
     ret = [re.search(r'^(?P<property>.+)(=)(?P<value>.+$)', x.strip()).group('property', 'value') for x in ret]
-
-    return tup_lst_to_dict(ret)
-
-
-def list_config():
-    try:
-        ret = prepared_call(['--list-config'])
-    except (CalledProcessError, EnvironmentError) as e:
-        app.logger.exception(e)
-        flash(u'Configuration request failed', 'danger')
-        return dict()
-
-    # XXX
-    ret = [(x, 'undefined') for x in ret]
 
     return tup_lst_to_dict(ret)
 
@@ -121,6 +107,38 @@ def reset_usb():
     except (CalledProcessError, EnvironmentError) as e:
         app.logger.exception(e)
         flash(u'USB reset request failed', 'danger')
+
+
+def list_config():
+    try:
+        ret = prepared_call(['--list-config'])
+    except (CalledProcessError, EnvironmentError) as e:
+        app.logger.exception(e)
+        flash(u'Configuration request failed', 'danger')
+        return dict()
+
+    # XXX
+    ret = [(x, 'undefined') for x in ret]
+
+    return tup_lst_to_dict(ret)
+
+
+def timelapse(frames=1, interval=10):
+    try:
+        check_call(['--frames', frames, '--interval', interval, '--capture-image'])
+    except (CalledProcessError, EnvironmentError) as e:
+        app.logger.exception(e)
+        flash(u'Timelapse request failed')
+        return
+
+
+def snapshot():
+    try:
+        check_call(['--capture-image'])
+    except (CalledProcessError, EnvironmentError) as e:
+        app.logger.exception(e)
+        flash(u'Snaphot request failed')
+        return
 
 
 # vim: set tabstop=4 shiftwidth=4 expandtab:

@@ -1,7 +1,6 @@
 {% set navigation_bar = [
-('camera', ('autodetect', 'abilities', 'storage'), 'camera'),
-('capture', ('image', 'video', 'audio'), 'picture'),
-('timelapse', ('timer', 'countdown'), 'time')
+('camera', ('autodetect', 'abilities', 'storage', 'settings'), 'camera'),
+('capture', ('image', 'timelapse'), 'picture')
 ] %}
 {% set active_page = active_page|default('index') %}
 <!DOCTYPE html>
@@ -32,8 +31,8 @@
                     <div class="nav-collapse collapse">
                         <ul class="nav navbar-nav">
                             {% for route, subroutes, icon in navigation_bar %}
-                            <li class="{% if route == active_page %}active{% endif %}dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ route|capitalize }} <b class="caret"></b></a>
+                            <li class="{% if route == active_page %}active {% endif %}dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-{{ icon }}"></span>{{ route|capitalize }} <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 {% for subroute in subroutes %}
                                 <li><a href="{{ url_for(route ~ '_' ~ subroute) }}"> {{ subroute|capitalize }}</a></li>
