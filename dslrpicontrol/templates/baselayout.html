@@ -14,9 +14,31 @@
 		{% endblock head %}
 	</head>
 	<body>
-		{% block body %}
-		{{ msg }}
-		{% endblock body %}
+
+
+		<div class="navbar navbar-static-top">
+			<div class="container">
+				<a class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<a class="navbar-brand" href="#">DSLR-Pi-Control</a>
+				<div class="nav-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="#">Home</a></li>
+						<li><a href="#about">About</a></li>
+						<li><a href="#contact">Contact</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="container">
+			{% block body %}
+			<h1>{{ msg }}</h1>
+			{% endblock body %}
+		</div>
 
 		{% block scripts %}
 		<script src="{{ url_for('static', filename='js/jquery-2.0.1.min.js') }}"></script>
