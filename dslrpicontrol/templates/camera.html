@@ -3,8 +3,9 @@
 
 {% block body %}
 <div class="row">
-	<div class="col col-lg-12">
+	<div class="col col-lg-6">
 		<table class="table table-striped">
+			<caption>Auto detection</caption>
 			<thead>
 				<tr>
 					<th>#</th>
@@ -19,6 +20,30 @@
 					<td>{{ loop.index }}</td>
 					<td>{{ camera.model }}</td>
 					<td>{{ camera.port }}</td>
+
+				</tr>
+				{% endfor %}
+			</tbody>
+
+		</table>
+	</div>
+	<div class="col col-lg-6">
+		<table class="table table-striped">
+			<caption>Abilities</caption>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Features</th>
+					<th>Support</th>
+				</tr>
+
+			</thead>
+			<tbody>
+				{% for ability in abilities %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ ability.feature }}</td>
+					<td>{{ ability.support }}</td>
 
 				</tr>
 				{% endfor %}

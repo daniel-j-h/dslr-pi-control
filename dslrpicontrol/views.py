@@ -4,7 +4,7 @@ from flask import flash, redirect, url_for
 
 from dslrpicontrol import app
 from dslrpicontrol.decorators import templated
-from dslrpicontrol.models import auto_detect
+from dslrpicontrol.models import auto_detect, abilities
 
 
 @app.route('/')

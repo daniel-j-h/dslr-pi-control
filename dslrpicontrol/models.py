@@ -11,37 +11,40 @@ def prepared_call(arguments):
     command = ['gphoto2', '--quiet']
     command.extend(arguments)
 
-    ret = [""]
-
-    try:
-        ret = check_output(command).splitlines()
-    except CalledProcessError as e:
-        app.logger.exception(e)
-        flash(u'Process returned with unexpected value', 'danger')
-    except EnvironmentError as e:
-        app.logger.exception(e)
-        flash(u'Unable to call process', 'danger')
-
-    return ret
+    return check_output(command).splitlines()
 
 
 def auto_detect():
-    ret = prepared_call(['--auto-detect'])
+    try:
+        ret = prepared_call(['--auto-detect'])
+    except (CalledProcessError, EnvironmentError) as e:
+        app.logger.exception(e)
+        flash(u'Auto-detecting failed', 'danger')
+        return []
 
-    # filter separating line
-    ret = [x.strip() for x in ret if not x.startswith('---') and not x.endswith('---')]
+    # nothing detected
+    if (len(ret) == 2): return []
 
-    # get (model, port) from smth. like "fst   snd   "
-    ret = [re.search(r'^(?P<model>.+?)(\s+)(?P<port>.+$)', x.strip()).group('model', 'port') for x in ret]
-
-    # transform to {model=x[0], port=x[1]}
-    ret = [dict(model=x[0], port=x[1]) for x in ret]
-
-    return ret
+    # filter: separating line
+    ret = [x for x in ret if not x.startswith('---') and not x.endswith('---')]
+    # map: transform to [(model, port), ...] from smth. like: ["model   port  ", ...]
+    ret = [re.search(r'^(?P<model>.+?)(\s+)(?P<port>.+$)', x).group('model', 'port') for x in ret]
+    # map: transform to [{model=x[0], port=x[1]}, ...]
+    return [dict(model=x[0].strip(), port=x[1].strip()) for x in ret]
 
 
 def abilities():
-    return prepared_call(['--abilities'])
+    try:
+        ret = prepared_call(['--abilities'])
+    except (CalledProcessError, EnvironmentError) as e:
+        app.logger.exception(e)
+        flash(u'Checking abilities failed', 'danger')
+        return []
+
+    # map: transform to [(feature, support), ...] from smth. like: ["feature  : support  ", ...]
+    ret = [re.search(r'^(?P<feature>.*?)(\s*:\s*)(?P<support>.*$)', x).group('feature', 'support') for x in ret]
+    # map: transform to [{feature=x[0], suppport=x[1]}, ...]
+    return [dict(feature=x[0].strip(), support=x[1].strip()) for x in ret]
 
 
 def list_config():
