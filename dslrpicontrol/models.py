@@ -109,6 +109,8 @@ def reset_usb():
         flash(u'USB reset request failed', 'danger')
 
 
+# XXX clear on config property setting
+@cache.cached(timeout=60 * 15, key_prefix='list_config')
 def list_config():
     try:
         ret = prepared_call(['--list-config'])
@@ -125,19 +127,23 @@ def list_config():
 
 def timelapse(frames=1, interval=10):
     try:
-        check_call(['--frames', frames, '--interval', interval, '--capture-image'])
+        # XXX use prepared_call and show filenames, thumbnails
+        check_call(['gphoto2', '--quiet', '--frames', str(frames), '--interval', str(interval), '--capture-image'])
+        flash(u'Timelapse request was successfull', 'success')
     except (CalledProcessError, EnvironmentError) as e:
         app.logger.exception(e)
-        flash(u'Timelapse request failed')
+        flash(u'Timelapse request failed', 'danger')
         return
 
 
 def snapshot():
     try:
-        check_call(['--capture-image'])
+        # XXX use prepared_call and show filenames, thumbnails
+        check_call(['gphoto2', '--quiet', '--capture-image'])
+        flash(u'Snapshot request was successfull', 'success')
     except (CalledProcessError, EnvironmentError) as e:
         app.logger.exception(e)
-        flash(u'Snaphot request failed')
+        flash(u'Snaphot request failed', 'danger')
         return
 
 

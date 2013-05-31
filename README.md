@@ -7,12 +7,6 @@ Tested on Chrome, Firefox, Nexus 4 smartphone, Nexus 7 tablet, Raspberry Pi Mode
 Note: This project serves primarily as a playground in order to refresh my knowledge about idiomatic Flask / Jinja2 setups.
 
 
-What it looks like
-------------------
-
-IMG
-
-
 Flask setup
 -----------
 
@@ -59,3 +53,13 @@ Try to keep the package clean.
 
     pep8 --show-source --max-line-length=120 dslrpicontrol
     pyflakes dslrpicontrol
+
+
+What it looks like
+------------------
+
+!(https://raw.github.com/daniel-j-h/dslr-pi-control/master/.assets/nexus7-1.jpg)
+!(https://raw.github.com/daniel-j-h/dslr-pi-control/master/.assets/nexus7-2.jpg)
+!(https://raw.github.com/daniel-j-h/dslr-pi-control/master/.assets/nexus7-3.jpg)
+
+

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from flask import redirect, url_for
+from flask import redirect, url_for, request
 
 from dslrpicontrol import app
 from dslrpicontrol.decorators import templated
-from dslrpicontrol.models import auto_detect, abilities, storage_info, reset_usb, list_config#, timelapse, snapshot
+from dslrpicontrol.models import auto_detect, abilities, storage_info, reset_usb, list_config, timelapse, snapshot
 
 
 @app.route('/')
@@ -54,15 +54,23 @@ def capture():
     return redirect(url_for('capture_image'))
 
 
-@app.route('/capture/image')
+@app.route('/capture/image', methods=['GET', 'POST'])
 @templated('capture.html')
 def capture_image():
+    # XXX
+    if request.method == 'POST':
+        snapshot()
+
     return dict(caption='Capture image')
 
 
-@app.route('/capture/timelapse')
+@app.route('/capture/timelapse', methods=['GET', 'POST'])
 @templated('capture.html')
 def capture_timelapse():
+    # XXX
+    if request.method == 'POST':
+        timelapse(frames=3, interval=10)
+
     return dict(caption='Timelapse')
 
 
