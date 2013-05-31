@@ -58,8 +58,8 @@ Try to keep the package clean.
 What it looks like
 ------------------
 
-!(https://raw.github.com/daniel-j-h/dslr-pi-control/master/.assets/nexus7-1.jpg)
-!(https://raw.github.com/daniel-j-h/dslr-pi-control/master/.assets/nexus7-2.jpg)
-!(https://raw.github.com/daniel-j-h/dslr-pi-control/master/.assets/nexus7-3.jpg)
+![autodetect](https://raw.github.com/daniel-j-h/dslr-pi-control/master/.assets/nexus7-1.jpg)
+![settings](https://raw.github.com/daniel-j-h/dslr-pi-control/master/.assets/nexus7-2.jpg)
+![capture](https://raw.github.com/daniel-j-h/dslr-pi-control/master/.assets/nexus7-3.jpg)
 
 
