@@ -16,15 +16,6 @@ def prepared_call(arguments):
     return check_output(command).splitlines()
 
 
-def tup_lst_to_dict(tup_lst):
-    # OrderedDict (think: tree-based map) preserves ordering;
-    # using it here is enough for all our code to magically do The Right Thing
-    to_dict = lambda lst: OrderedDict(lst)
-    strip_tup = lambda (a, b): (a.strip(), b.strip())
-
-    return to_dict(map(strip_tup, tup_lst))
-
-
 @cache.cached(timeout=60 * 15, key_prefix='auto_detect')
 def auto_detect():
     try:
@@ -36,18 +27,17 @@ def auto_detect():
         return dict()
 
     # nothing detected, only header and separation line
-    if (len(ret) == 2):
+    if (len(ret) <= 2):
         flash(u'Auto-detection was not able to detect your camera', 'info')
         return dict()
 
     # remove header and separating line
-    ret.pop(0)
-    ret.pop(0)
+    ret = ret[2:]
 
     # map: transform to [(model, port), ...] from smth. like: ['model   port  ', ...]
     ret = [re.search(r'^(?P<model>.+)(\s+)(?P<port>.+$)', x.strip()).group('model', 'port') for x in ret]
 
-    return tup_lst_to_dict(ret)
+    return dict(ret)
 
 
 @cache.cached(timeout=60 * 15, key_prefix='abilities')
@@ -64,7 +54,8 @@ def abilities():
     # map: transform to [(feature, support), ...] from smth. like: ['feature  : support  ', ...]
     ret = [re.search(r'^(?P<feature>.*)(\s*:\s*)(?P<support>.*$)', x.strip()).group('feature', 'support') for x in ret]
 
-    return tup_lst_to_dict(ret)
+    # XXX ordering is important, because of entries spanning more than one line here
+    return OrderedDict(ret)
 
 
 @cache.cached(timeout=60 * 15, key_prefix='storage_info')
@@ -78,10 +69,10 @@ def storage_info():
 
     # filter: group name
     ret = filter(lambda x: not x.startswith('[') and not x.endswith(']') and not len(x) == 0, ret)
-    # map: transform to (property, value) from smth. like: ['property=value', ...]
+    # map: transform to [(property, value), ...] from smth. like: ['property=value', ...]
     ret = [re.search(r'^(?P<property>.+)(=)(?P<value>.+$)', x.strip()).group('property', 'value') for x in ret]
 
-    return tup_lst_to_dict(ret)
+    return dict(ret)
 
 
 def reset_usb():
@@ -122,7 +113,7 @@ def list_config():
     # XXX
     ret = [(x, 'undefined') for x in ret]
 
-    return tup_lst_to_dict(ret)
+    return dict(ret)
 
 
 def timelapse(frames=1, interval=10):
